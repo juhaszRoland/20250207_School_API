@@ -26,4 +26,5 @@ Route::post('/login', [AuthController::class, 'login']);
 //Protected routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::apiResource('students', StudentController::class)->except(['index', 'show']);
+    Route::post('/logout', [AuthController::class, 'logout']);
 });

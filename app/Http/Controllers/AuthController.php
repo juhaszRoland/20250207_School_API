@@ -30,11 +30,19 @@ class AuthController extends Controller
 
         /** @var User $user **/
         $user = Auth::user();
-        $token = $user->createToken('authToken')->plainTextToken;
+        $token = $user->createToken('authToken', ['*'], now()->addMinutes(30))->plainTextToken;
 
         return response()->json([
             'user' => $user,
             'token' => $token
         ], 200);
+    }
+
+    public function logout(){
+        /** @var User $user **/
+        $user = Auth::user();
+
+        $user->currentAccessToken()->delete();
+        return response()->json(['message' => 'Logged out'], 200);
     }
 }
