@@ -27,7 +27,7 @@ class StoreStudentRequest extends FormRequest
             'email' => 'required|email|unique:students,email',
             'phone' => 'nullable|string|max:20',
             'birthdate' => 'required|date',
-            'card_id' => 'required|string|size:8',
+            'card_id' => 'required|string|size:8|unique:students,card_id',
             'password' => ['required','string', 'confirmed', Password::min(8)->mixedCase()->numbers()->symbols()],
             'group_id' => 'required|exists:groups,id',
         ];

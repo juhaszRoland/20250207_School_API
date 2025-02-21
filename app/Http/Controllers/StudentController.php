@@ -6,6 +6,8 @@ use App\Models\Student;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Http\Resources\StudentResource;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
 
 class StudentController extends Controller
 {
@@ -23,7 +25,13 @@ class StudentController extends Controller
      */
     public function store(StoreStudentRequest $request)
     {
+        if(!Auth::user()->is_admin) {
+            return response()->json(['message' => 'You are not authorized to create a student!']);
+        }
+
+
         $validated = $request->validated();
+        $validated['password'] = Password::make($validated['password']);
         $student = Student::create($validated);
         return response()->json(new StudentResource($student));
     }
