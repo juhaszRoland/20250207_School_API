@@ -53,6 +53,12 @@ class StudentController extends Controller
      */
     public function update(UpdateStudentRequest $request, Student $student)
     {
+        /** @var user $user **/
+        $user = Auth::user();
+        if($user->cannot('update', $student)) {
+            return response()->json(['message' => 'You are not authorized to update a student!'], 403);
+        }
+
         $validated = $request->validated();
         $student->update($validated);
         return response()->json(new StudentResource($student));

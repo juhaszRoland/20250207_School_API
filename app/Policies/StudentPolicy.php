@@ -37,7 +37,7 @@ class StudentPolicy
      */
     public function update(User $user, Student $student): bool
     {
-        return false;
+        return $user->is_admin;
     }
 
     /**
