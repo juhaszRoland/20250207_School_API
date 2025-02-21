@@ -7,7 +7,7 @@ use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
 use App\Http\Resources\StudentResource;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Hash;
 
 class StudentController extends Controller
 {
@@ -31,7 +31,7 @@ class StudentController extends Controller
 
 
         $validated = $request->validated();
-        $validated['password'] = Password::make($validated['password']);
+        $validated['password'] = Hash::make($validated['password']);
         $student = Student::create($validated);
         return response()->json(new StudentResource($student));
     }
