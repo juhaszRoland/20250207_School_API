@@ -25,10 +25,15 @@ class StudentController extends Controller
      */
     public function store(StoreStudentRequest $request)
     {
-        if(!Auth::user()->is_admin) {
-            return response()->json(['message' => 'You are not authorized to create a student!']);
-        }
+        // if(!Auth::user()->is_admin) {
+        //     return response()->json(['message' => 'You are not authorized to create a student!']);
+        // }
 
+        /** @var user $user **/
+        $user = Auth::user();
+        if($user->cannot('create', Student::class)) {
+            return response()->json(['message' => 'You are not authorized to create new student!'], 403);
+        }
 
         $validated = $request->validated();
         $validated['password'] = Hash::make($validated['password']);
@@ -69,6 +74,11 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
+        /** @var user $user **/
+        $user = Auth::user();
+        if($user->cannot('delete', $student)) {
+            return response()->json(['message' => 'You are not authorized to delete this student!'], 403);
+        }
         $student->delete();
         return response()->noContent();
     }
